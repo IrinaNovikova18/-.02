@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ip212Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "19ip212.dbo.Вопрос_Ответ" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="Вопрос_Ответ">
+          <Key>
+            <PropertyRef Name="id вопроса" />
+            <PropertyRef Name="id ответа" />
+          </Key>
+          <Property Name="id вопроса" Type="int" Nullable="false" />
+          <Property Name="id ответа" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Вопросы">
+          <Key>
+            <PropertyRef Name="Id вопроса" />
+          </Key>
+          <Property Name="Id вопроса" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Вопрос" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="id темы" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Дисциплина">
+          <Key>
+            <PropertyRef Name="id дисциплины" />
+          </Key>
+          <Property Name="id дисциплины" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Название" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Дисциплина_Раздел">
+          <Key>
+            <PropertyRef Name="id дисциплины" />
+          </Key>
+          <Property Name="id дисциплины" Type="int" Nullable="false" />
+          <Property Name="id раздела" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ответы">
+          <Key>
+            <PropertyRef Name="id ответа" />
+          </Key>
+          <Property Name="id ответа" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Описание" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="ВерныйНеверный" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Раздел">
+          <Key>
+            <PropertyRef Name="id раздела" />
+          </Key>
+          <Property Name="id раздела" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Название" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Тема">
+          <Key>
+            <PropertyRef Name="id темы" />
+          </Key>
+          <Property Name="id темы" Type="int" Nullable="false" />
+          <Property Name="id раздела" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Вопрос_Ответ_Вопросы">
+          <End Role="Вопросы" Type="Self.Вопросы" Multiplicity="1" />
+          <End Role="Вопрос_Ответ" Type="Self.Вопрос_Ответ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Вопросы">
+              <PropertyRef Name="Id вопроса" />
+            </Principal>
+            <Dependent Role="Вопрос_Ответ">
+              <PropertyRef Name="id вопроса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Вопрос_Ответ_Ответы">
+          <End Role="Ответы" Type="Self.Ответы" Multiplicity="1" />
+          <End Role="Вопрос_Ответ" Type="Self.Вопрос_Ответ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ответы">
+              <PropertyRef Name="id ответа" />
+            </Principal>
+            <Dependent Role="Вопрос_Ответ">
+              <PropertyRef Name="id ответа" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Вопросы_Тема">
+          <End Role="Тема" Type="Self.Тема" Multiplicity="1" />
+          <End Role="Вопросы" Type="Self.Вопросы" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Тема">
+              <PropertyRef Name="id темы" />
+            </Principal>
+            <Dependent Role="Вопросы">
+              <PropertyRef Name="id темы" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Дисциплина_Дисциплина_Раздел">
+          <End Role="Дисциплина_Раздел" Type="Self.Дисциплина_Раздел" Multiplicity="1" />
+          <End Role="Дисциплина" Type="Self.Дисциплина" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Дисциплина_Раздел">
+              <PropertyRef Name="id дисциплины" />
+            </Principal>
+            <Dependent Role="Дисциплина">
+              <PropertyRef Name="id дисциплины" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Дисциплина_Раздел_Раздел">
+          <End Role="Раздел" Type="Self.Раздел" Multiplicity="1" />
+          <End Role="Дисциплина_Раздел" Type="Self.Дисциплина_Раздел" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Раздел">
+              <PropertyRef Name="id раздела" />
+            </Principal>
+            <Dependent Role="Дисциплина_Раздел">
+              <PropertyRef Name="id раздела" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Тема_Раздел">
+          <End Role="Раздел" Type="Self.Раздел" Multiplicity="1" />
+          <End Role="Тема" Type="Self.Тема" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Раздел">
+              <PropertyRef Name="id раздела" />
+            </Principal>
+            <Dependent Role="Тема">
+              <PropertyRef Name="id раздела" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ip212ModelContainer">
+          <EntitySet Name="Вопросы" EntityType="Self.Вопросы" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Дисциплина" EntityType="Self.Дисциплина" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Дисциплина_Раздел" EntityType="Self.Дисциплина_Раздел" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ответы" EntityType="Self.Ответы" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Раздел" EntityType="Self.Раздел" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Тема" EntityType="Self.Тема" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Вопрос_Ответ" EntityType="Self.Вопрос_Ответ" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Вопрос_Ответ].[id вопроса] AS [id вопроса], 
+    [Вопрос_Ответ].[id ответа] AS [id ответа]
+    FROM [dbo].[Вопрос_Ответ] AS [Вопрос_Ответ]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Вопрос_Ответ_Вопросы" Association="Self.FK_Вопрос_Ответ_Вопросы">
+            <End Role="Вопросы" EntitySet="Вопросы" />
+            <End Role="Вопрос_Ответ" EntitySet="Вопрос_Ответ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Вопрос_Ответ_Ответы" Association="Self.FK_Вопрос_Ответ_Ответы">
+            <End Role="Ответы" EntitySet="Ответы" />
+            <End Role="Вопрос_Ответ" EntitySet="Вопрос_Ответ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Вопросы_Тема" Association="Self.FK_Вопросы_Тема">
+            <End Role="Тема" EntitySet="Тема" />
+            <End Role="Вопросы" EntitySet="Вопросы" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Дисциплина_Дисциплина_Раздел" Association="Self.FK_Дисциплина_Дисциплина_Раздел">
+            <End Role="Дисциплина_Раздел" EntitySet="Дисциплина_Раздел" />
+            <End Role="Дисциплина" EntitySet="Дисциплина" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Дисциплина_Раздел_Раздел" Association="Self.FK_Дисциплина_Раздел_Раздел">
+            <End Role="Раздел" EntitySet="Раздел" />
+            <End Role="Дисциплина_Раздел" EntitySet="Дисциплина_Раздел" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Тема_Раздел" Association="Self.FK_Тема_Раздел">
+            <End Role="Раздел" EntitySet="Раздел" />
+            <End Role="Тема" EntitySet="Тема" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ip212Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Вопросы">
+          <Key>
+            <PropertyRef Name="Id_вопроса" />
+          </Key>
+          <Property Name="Id_вопроса" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Вопрос" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="id_темы" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Тема" Relationship="Self.FK_Вопросы_Тема" FromRole="Вопросы" ToRole="Тема" />
+          <NavigationProperty Name="Ответы" Relationship="Self.Вопрос_Ответ" FromRole="Вопросы" ToRole="Ответы" />
+        </EntityType>
+        <EntityType Name="Дисциплина">
+          <Key>
+            <PropertyRef Name="id_дисциплины" />
+          </Key>
+          <Property Name="id_дисциплины" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Название" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Дисциплина_Раздел" Relationship="Self.FK_Дисциплина_Дисциплина_Раздел" FromRole="Дисциплина" ToRole="Дисциплина_Раздел" />
+        </EntityType>
+        <EntityType Name="Дисциплина_Раздел">
+          <Key>
+            <PropertyRef Name="id_дисциплины" />
+          </Key>
+          <Property Name="id_дисциплины" Type="Int32" Nullable="false" />
+          <Property Name="id_раздела" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Дисциплина" Relationship="Self.FK_Дисциплина_Дисциплина_Раздел" FromRole="Дисциплина_Раздел" ToRole="Дисциплина" />
+          <NavigationProperty Name="Раздел" Relationship="Self.FK_Дисциплина_Раздел_Раздел" FromRole="Дисциплина_Раздел" ToRole="Раздел" />
+        </EntityType>
+        <EntityType Name="Ответы">
+          <Key>
+            <PropertyRef Name="id_ответа" />
+          </Key>
+          <Property Name="id_ответа" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Описание" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="ВерныйНеверный" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Вопросы" Relationship="Self.Вопрос_Ответ" FromRole="Ответы" ToRole="Вопросы" />
+        </EntityType>
+        <EntityType Name="Раздел">
+          <Key>
+            <PropertyRef Name="id_раздела" />
+          </Key>
+          <Property Name="id_раздела" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Название" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Дисциплина_Раздел" Relationship="Self.FK_Дисциплина_Раздел_Раздел" FromRole="Раздел" ToRole="Дисциплина_Раздел" />
+          <NavigationProperty Name="Тема" Relationship="Self.FK_Тема_Раздел" FromRole="Раздел" ToRole="Тема" />
+        </EntityType>
+        <EntityType Name="Тема">
+          <Key>
+            <PropertyRef Name="id_темы" />
+          </Key>
+          <Property Name="id_темы" Type="Int32" Nullable="false" />
+          <Property Name="id_раздела" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Вопросы" Relationship="Self.FK_Вопросы_Тема" FromRole="Тема" ToRole="Вопросы" />
+          <NavigationProperty Name="Раздел" Relationship="Self.FK_Тема_Раздел" FromRole="Тема" ToRole="Раздел" />
+        </EntityType>
+        <Association Name="FK_Вопросы_Тема">
+          <End Role="Тема" Type="Self.Тема" Multiplicity="1" />
+          <End Role="Вопросы" Type="Self.Вопросы" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Тема">
+              <PropertyRef Name="id_темы" />
+            </Principal>
+            <Dependent Role="Вопросы">
+              <PropertyRef Name="id_темы" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Дисциплина_Дисциплина_Раздел">
+          <End Role="Дисциплина_Раздел" Type="Self.Дисциплина_Раздел" Multiplicity="1" />
+          <End Role="Дисциплина" Type="Self.Дисциплина" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Дисциплина_Раздел">
+              <PropertyRef Name="id_дисциплины" />
+            </Principal>
+            <Dependent Role="Дисциплина">
+              <PropertyRef Name="id_дисциплины" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Дисциплина_Раздел_Раздел">
+          <End Role="Раздел" Type="Self.Раздел" Multiplicity="1" />
+          <End Role="Дисциплина_Раздел" Type="Self.Дисциплина_Раздел" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Раздел">
+              <PropertyRef Name="id_раздела" />
+            </Principal>
+            <Dependent Role="Дисциплина_Раздел">
+              <PropertyRef Name="id_раздела" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Тема_Раздел">
+          <End Role="Раздел" Type="Self.Раздел" Multiplicity="1" />
+          <End Role="Тема" Type="Self.Тема" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Раздел">
+              <PropertyRef Name="id_раздела" />
+            </Principal>
+            <Dependent Role="Тема">
+              <PropertyRef Name="id_раздела" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Вопрос_Ответ">
+          <End Role="Вопросы" Type="Self.Вопросы" Multiplicity="*" />
+          <End Role="Ответы" Type="Self.Ответы" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Вопросы" EntityType="Self.Вопросы" />
+          <EntitySet Name="Дисциплина" EntityType="Self.Дисциплина" />
+          <EntitySet Name="Дисциплина_Раздел" EntityType="Self.Дисциплина_Раздел" />
+          <EntitySet Name="Ответы" EntityType="Self.Ответы" />
+          <EntitySet Name="Раздел" EntityType="Self.Раздел" />
+          <EntitySet Name="Тема" EntityType="Self.Тема" />
+          <AssociationSet Name="FK_Вопросы_Тема" Association="Self.FK_Вопросы_Тема">
+            <End Role="Тема" EntitySet="Тема" />
+            <End Role="Вопросы" EntitySet="Вопросы" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Дисциплина_Дисциплина_Раздел" Association="Self.FK_Дисциплина_Дисциплина_Раздел">
+            <End Role="Дисциплина_Раздел" EntitySet="Дисциплина_Раздел" />
+            <End Role="Дисциплина" EntitySet="Дисциплина" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Дисциплина_Раздел_Раздел" Association="Self.FK_Дисциплина_Раздел_Раздел">
+            <End Role="Раздел" EntitySet="Раздел" />
+            <End Role="Дисциплина_Раздел" EntitySet="Дисциплина_Раздел" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Тема_Раздел" Association="Self.FK_Тема_Раздел">
+            <End Role="Раздел" EntitySet="Раздел" />
+            <End Role="Тема" EntitySet="Тема" />
+          </AssociationSet>
+          <AssociationSet Name="Вопрос_Ответ" Association="Self.Вопрос_Ответ">
+            <End Role="Вопросы" EntitySet="Вопросы" />
+            <End Role="Ответы" EntitySet="Ответы" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ip212ModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Вопросы">
+            <EntityTypeMapping TypeName="ip212Model.Вопросы">
+              <MappingFragment StoreEntitySet="Вопросы">
+                <ScalarProperty Name="Id_вопроса" ColumnName="Id вопроса" />
+                <ScalarProperty Name="Вопрос" ColumnName="Вопрос" />
+                <ScalarProperty Name="id_темы" ColumnName="id темы" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Дисциплина">
+            <EntityTypeMapping TypeName="ip212Model.Дисциплина">
+              <MappingFragment StoreEntitySet="Дисциплина">
+                <ScalarProperty Name="id_дисциплины" ColumnName="id дисциплины" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Дисциплина_Раздел">
+            <EntityTypeMapping TypeName="ip212Model.Дисциплина_Раздел">
+              <MappingFragment StoreEntitySet="Дисциплина_Раздел">
+                <ScalarProperty Name="id_дисциплины" ColumnName="id дисциплины" />
+                <ScalarProperty Name="id_раздела" ColumnName="id раздела" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ответы">
+            <EntityTypeMapping TypeName="ip212Model.Ответы">
+              <MappingFragment StoreEntitySet="Ответы">
+                <ScalarProperty Name="id_ответа" ColumnName="id ответа" />
+                <ScalarProperty Name="Описание" ColumnName="Описание" />
+                <ScalarProperty Name="ВерныйНеверный" ColumnName="ВерныйНеверный" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Раздел">
+            <EntityTypeMapping TypeName="ip212Model.Раздел">
+              <MappingFragment StoreEntitySet="Раздел">
+                <ScalarProperty Name="id_раздела" ColumnName="id раздела" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Тема">
+            <EntityTypeMapping TypeName="ip212Model.Тема">
+              <MappingFragment StoreEntitySet="Тема">
+                <ScalarProperty Name="id_темы" ColumnName="id темы" />
+                <ScalarProperty Name="id_раздела" ColumnName="id раздела" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Вопрос_Ответ" TypeName="ip212Model.Вопрос_Ответ" StoreEntitySet="Вопрос_Ответ">
+            <EndProperty Name="Вопросы">
+              <ScalarProperty Name="Id_вопроса" ColumnName="id вопроса" />
+            </EndProperty>
+            <EndProperty Name="Ответы">
+              <ScalarProperty Name="id_ответа" ColumnName="id ответа" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
